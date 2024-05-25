@@ -1,5 +1,6 @@
 from django.contrib import messages
-from django.http import HttpResponseRedirect
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
@@ -34,7 +35,7 @@ def register(request):
         headers = {'Content-Type': 'application/json'}
 
         # Post the data
-        r = requests.post("http://localhost:8081/auth/register", data=data, headers=headers)
+        r = requests.post("http://34.126.177.181/auth/register", data=data, headers=headers)
         if r.status_code == 200:
             print('success reg')
             return redirect("authentication:login")  # make sure to use the correct namespace and URL name
@@ -56,31 +57,80 @@ def login(request):
         headers = {'Content-Type': 'application/json'}
 
         print('data:', data)
-        r = requests.post("http://localhost:8081/auth/login", data=data, headers=headers)
+        r = requests.post("http://34.126.177.181/auth/login", data=data, headers=headers)
         
         if r.status_code == 200:
-            print('success login')
-            resp = redirect("subscription_management:box_list")  # Adjust as per your URL names
-            # Set the Authorization token as a cookie, retrieved from JSON response
+            resp = redirect(reverse("authentication:profile_detail", kwargs={"username": username}))
             token = r.json().get("data", {}).get("token")
             if token:
                 resp.set_cookie("Authorization", "Bearer " + token)
                 resp.set_cookie("username", username)
             else:
-                # Handle the case where the token is not found in the response
                 raise ValueError("Token not found in the response")
-            
             return resp
         else:
-            print('failed login')
             messages.error(request, "Incorrect username or password")
     
     return render(request, "login.html", {})
 
 @csrf_exempt
 def logout_user(request):
-    # logout(request)
-    response = HttpResponseRedirect(reverse('homepage:show_homepage'))
-    for cookie in request.COOKIES:
-        response.delete_cookie(cookie)
-    return response
+    headers = {'Authorization': request.COOKIES.get('Authorization')}
+    r = requests.post("http://34.126.177.181/auth/logout", headers=headers)
+    if r.status_code == 200:
+        response = HttpResponseRedirect(reverse('homepage:show_homepage'))
+        for cookie in request.COOKIES:
+            response.delete_cookie(cookie)
+        return response
+    else:
+        messages.error(request, "Logout failed.")
+        return redirect('authentication:profile_detail', username=request.COOKIES.get('username'))
+
+def profile_detail(request, username):
+    headers = {'Authorization': request.COOKIES.get('Authorization')}
+    r = requests.get(f"http://34.126.177.181/auth/profiles/{username}", headers=headers)
+    profile = r.json() if r.status_code == 200 else None
+    if profile is None:
+        return HttpResponseNotFound("Profile not found")
+    return render(request, "profile_detail.html", {'profile': profile})
+
+@csrf_exempt
+def profile_edit(request, username):
+    headers = {'Authorization': request.COOKIES.get('Authorization')}
+    if request.method == "POST":
+        data = json.dumps({
+            "username": request.POST.get("username"),
+            "fullName": request.POST.get("fullName"),
+            "email": request.POST.get("email"),
+            "phoneNumber": request.POST.get("phoneNumber"),
+            "address": request.POST.get("address"),
+            "role": request.POST.get("role")
+        })
+        headers['Content-Type'] = 'application/json'
+        r = requests.put(f"http://34.126.177.181/auth/profiles/{username}", data=data, headers=headers)
+        if r.status_code == 200:
+            messages.success(request, "Profile updated successfully.")
+            return redirect('authentication:profile_detail', username=username)
+        else:
+            messages.error(request, "Failed to update profile.")
+    
+    r = requests.get(f"http://34.126.177.181/auth/profiles/{username}", headers=headers)
+    profile = r.json() if r.status_code == 200 else None
+    if profile is None:
+        return HttpResponseNotFound("Profile not found")
+    return render(request, "profile_edit.html", {'profile': profile})
+
+@csrf_exempt
+def profile_delete(request, username):
+    headers = {'Authorization': request.COOKIES.get('Authorization')}
+    if request.method == "POST":
+        r = requests.delete(f"http://34.126.177.181/auth/profiles/{username}", headers=headers)
+        if r.status_code == 204:
+            messages.success(request, "Profile deleted successfully.")
+            response = HttpResponseRedirect('/')
+            response.delete_cookie('Authorization')
+            response.delete_cookie('username')
+            return response
+        else:
+            messages.error(request, "Failed to delete profile.")
+    return render(request, "profile_delete.html", {'username': username})
