@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Review HTML</title>
+</head>
+<body>
+    <h1>Test Review Page</h1>
+    <ul>
+        {% for review in reviews %}
+        <li>
+            <h3>Rating: {{ review.rating_score }}</h3>
+            <p>Review: {{ review.review }}</p>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
