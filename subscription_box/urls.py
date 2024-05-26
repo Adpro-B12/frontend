@@ -12,7 +12,7 @@ urlpatterns = [
     path('item/update/<int:id>', update_item, name='update_item'),
     path('item/delete/<int:id>', delete_item, name='delete_item'),
     path('box/get/<int:id>', view_subscriptions , name='get_subscription'),
-    path('item/get/<int:id>', view_items, name='get_items'),
+    path('item/get/<int:id>', view_items, name='get_item'),
     path('box/get', get_subscription_ajax, name='all_subscriptions'),
     path('item/get', get_item_ajax, name='all_items'),
 ]
