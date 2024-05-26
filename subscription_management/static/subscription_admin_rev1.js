@@ -25,6 +25,7 @@ function updateSubscriptionsCards(subscriptions) {
                     <p class="card-text">Status: ${sub.status}</p>
                     <p class="card-text">Start Date: ${sub.startDate}</p>
                     <p class="card-text">End Date: ${sub.endDate}</p>
+                    <p class="card-text">Username: ${sub.username}</p>
                 </div>
                 <div class="card-footer">
                     <button class="btn btn-danger" onclick="detailToBox(${sub.id}, 'cancel')">Cancel</button>

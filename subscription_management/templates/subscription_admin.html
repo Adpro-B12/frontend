@@ -33,5 +33,11 @@
 
     <div id="subscriptionsCards" class="row mt-4"></div>
 </div>
-<script src="{% static 'subscription_admin_rev.js' %}"></script>
+
+<div class="d-flex justify-content-center mt-3">
+    <button onclick="location.href=`{% url 'subscription_management:subscription_history' %}`" type="button" class="btn btn-warning">
+        Back to Subscription List
+    </button>
+</div>
+<script src="{% static 'subscription_admin_rev1.js' %}"></script>
 {% endblock content %}
