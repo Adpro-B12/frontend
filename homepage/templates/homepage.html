@@ -16,9 +16,6 @@
         <div class="my-4">
             <a href="{% url 'authentication:login' %}" class="btn btn-primary btn-lg mx-2">Login</a>
             <a href="{% url 'authentication:register' %}" class="btn btn-primary btn-lg mx-2">Register</a>
-            {% if request.COOKIES.username %}
-            <a href="{% url 'authentication:profile_detail' request.COOKIES.username %}" class="btn btn-secondary btn-lg mx-2">My Profile</a>
-            {% endif %}
         </div>
     </div>
 </header>
