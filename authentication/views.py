@@ -60,11 +60,15 @@ def login(request):
         r = requests.post("http://34.126.177.181/auth/login", data=data, headers=headers)
         
         if r.status_code == 200:
-            resp = redirect(reverse("authentication:profile_detail", kwargs={"username": username}))
-            token = r.json().get("data", {}).get("token")
+            response_data = r.json().get("data", {})
+            token = response_data.get("token")
+            role = response_data.get("role")  # Akses role pengguna
+            
             if token:
+                resp = redirect(reverse("authentication:profile_detail", kwargs={"username": username}))
                 resp.set_cookie("Authorization", "Bearer " + token)
                 resp.set_cookie("username", username)
+                resp.set_cookie("role", role)  # Simpan role pengguna dalam cookie
             else:
                 raise ValueError("Token not found in the response")
             return resp
@@ -90,13 +94,15 @@ def profile_detail(request, username):
     headers = {'Authorization': request.COOKIES.get('Authorization')}
     r = requests.get(f"http://34.126.177.181/auth/profiles/{username}", headers=headers)
     profile = r.json() if r.status_code == 200 else None
+    role = request.COOKIES.get('role')
     if profile is None:
         return HttpResponseNotFound("Profile not found")
-    return render(request, "profile_detail.html", {'profile': profile})
+    return render(request, "profile_detail.html", {'profile': profile, 'role': role})
 
 @csrf_exempt
 def profile_edit(request, username):
     headers = {'Authorization': request.COOKIES.get('Authorization')}
+    role = request.COOKIES.get('role')
     if request.method == "POST":
         data = json.dumps({
             "username": request.POST.get("username"),
@@ -104,7 +110,7 @@ def profile_edit(request, username):
             "email": request.POST.get("email"),
             "phoneNumber": request.POST.get("phoneNumber"),
             "address": request.POST.get("address"),
-            "role": request.POST.get("role")
+            "role": role
         })
         headers['Content-Type'] = 'application/json'
         r = requests.put(f"http://34.126.177.181/auth/profiles/{username}", data=data, headers=headers)
@@ -118,7 +124,7 @@ def profile_edit(request, username):
     profile = r.json() if r.status_code == 200 else None
     if profile is None:
         return HttpResponseNotFound("Profile not found")
-    return render(request, "profile_edit.html", {'profile': profile})
+    return render(request, "profile_edit.html", {'profile': profile, 'role': role})
 
 @csrf_exempt
 def profile_delete(request, username):
