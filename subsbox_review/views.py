@@ -7,7 +7,7 @@ from django.core import serializers
 # Create your views here.
 
 def get_all_reviews(request):
-    response = requests.get('http://localhost:8080/api/reviews/all')
+    response = requests.get('http://34.87.138.18/api/reviews/all')
     reviews = response.json()
     return render(request, 'review.html', {'reviews': reviews})
 
@@ -24,7 +24,7 @@ def create_review(request):
             }
         ])
 
-        response = request.post('http://localhost:8080/api/reviews/create', data=data, headers={'Content-Type': 'application/json'})
+        response = request.post('http://34.87.138.18/api/reviews/create', data=data, headers={'Content-Type': 'application/json'})
         res = response.json()
         return HttpResponse(content=res, status=200)
     
