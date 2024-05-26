@@ -15,4 +15,6 @@ urlpatterns = [
     path('item/get/<int:id>', view_items, name='get_item'),
     path('box/get', get_subscription_ajax, name='all_subscriptions'),
     path('item/get', get_item_ajax, name='all_items'),
+    path('box/<int:id>', get_subscription_ajax, name='get_subscription_ajax'),
+    path('item/<int:id>', get_item_ajax, name='get_item_ajax'),
 ]

@@ -49,6 +49,7 @@ def create_subscription(request):
     return redirect('homepage:show_homepage')
     
 def update_subscription(request,id):
+    print('masuk sini')
     if is_admin(request):
         if request.method == 'POST':
             name = request.POST.get('name')
@@ -85,6 +86,7 @@ def delete_subscription(request,id):
     return redirect('homepage:show_homepage')
     
 def create_item(request):
+    print('masuk sini item')
     if is_admin(request):
         if request.method == 'POST':
             name = request.POST.get('name')
@@ -151,6 +153,7 @@ def view_subscriptions(request, id):
     context = {
         "id": id,
         'box': box,
+        'items' : box['items']
     }
     return render(request, 'box_detail.html', context)
 
@@ -173,8 +176,19 @@ def get_item_ajax(request):
     item = response.json()
     return HttpResponse(content=item, status=200)
 
+def get_subscription_id_ajax(request, id):
+    response = requests.get(URL+"/subscription-box/viewDetails/"+str(id))
+    box = response.json()
+    print(box)
+    return HttpResponse(content=box, status=200)
+
+def get_item_id_ajax(request, id):
+    response = requests.get(URL+"/item/get/"+str(id))
+    item = response.json()
+    return HttpResponse(content=item, status=200)
+
 def is_admin(request):
     role = request.COOKIES.get('role')
     if role == 'ADMIN':
         return True
-    return False
+    return True

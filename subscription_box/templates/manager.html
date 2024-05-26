@@ -196,7 +196,7 @@
                 <td>${box.price}</td>
                 <td>${box.type}</td>
                 <td>
-                    <button class="btn btn-outline-primary" onclick="editBox(${box.id})">Detail</button>
+                    <button class="btn btn-outline-primary" onclick="getBox(${box.id})">Detail</button>
                     <button class="btn btn-outline-danger" onclick="deleteBox('${box.id}')" method="POST">Delete</button>
                 </td>
             `;
@@ -216,7 +216,7 @@
                 <td>${item.name}</td>
                 <td>${item.quantity}</td>
                 <td>
-                    <button class="btn btn-outline-primary" onclick="editItem(${item.id})">Detail</button>
+                    <button class="btn btn-outline-primary" onclick="getItem(${item.id})">Detail</button>
                     <button class="btn btn-outline-danger" onclick="deleteItem('${item.id}')" method="POST">Delete</button>
                 </td>
             `;
@@ -232,8 +232,8 @@
         })
         .then((response) => {
             if (response.ok) {
-                refreshBox();   
                 window.location.reload();
+                refreshBox();   
             }
         });  
     }
