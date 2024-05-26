@@ -5,258 +5,257 @@
 {% endblock meta %}
 
 {% block content %}
-<dh-component>
-    <div class="py-12 transition duration-150 ease-in-out z-10 absolute top-0 right-0 bottom-0 left-0 backdrop-blur-md" id="modal" aria-hidden="true" hidden>
-        <div role="alert" class="container mx-auto w-11/12 md:w-2/3 max-w-lg">
-            <div class="relative py-8 px-5 md:px-10 bg-white shadow-md rounded border border-gray-400">
-                <div class="w-full flex justify-start text-gray-600 mb-3">
-                    <svg  xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-wallet" width="52" height="52" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" />
-                        <path d="M17 8v-3a1 1 0 0 0 -1 -1h-10a2 2 0 0 0 0 4h12a1 1 0 0 1 1 1v3m0 4v3a1 1 0 0 1 -1 1h-12a2 2 0 0 1 -2 -2v-12" />
-                        <path d="M20 12v4h-4a2 2 0 0 1 0 -4h4" />
-                    </svg>
-                    <h1 class="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4">Request a Book</h1>
-                </div>
-
-                <form method="post" id="request-form-1" class="space-y-4">
+<div class="modal fade" id="modal-1" tabindex="-1" aria-labelledby="modal-1-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-1-label">Create a Subscription Box</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="request-form-1">
                     {% csrf_token %}
-                    <div class="flex items center justify-start w-full space-x-4">
-                        <label for="name" class="text-gray-600">Name</label>
-                        <input type="text" name="name" id="name" class="border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#AA3855] transition duration-150 ease-in-out w-full" required>
-                        <label for="price" class="text-gray-600">Price</label>
-                        <input type="number" name="price" id="price" class="border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#AA3855] transition duration-150 ease-in-out w-full" required>
-                        <label for="type" class="text-gray-600">Type</label>
-                        <input type="radio" name="type" id="qtr" value="QTR">
-                        <label for="qtr">QTR</label>
-                        <input type="radio" name="type" id="mth" value="MTH">
-                        <label for="mth">MTH</label>
-                        <input type="radio" name="type" id="saa" value="SAA">
-                        <label for="saa">SAA</label>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
                     </div>
-
-                    <div class="flex items-center justify-start w-full">
-                        <button class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#AA3855] transition duration-150 ease-in-out hover:bg-[#AA3855] bg-[#C44B6A] rounded text-white px-8 py-2 text-sm" onclick="createSubscription()">Submit</button>
-                        <button class="focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-gray-400 ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded px-8 py-2 text-sm" onclick="modalHandler()">Cancel</button>
+                    <div class="mb-3">
+                        <label for="price" class="form-label">Price</label>
+                        <input type="number" class="form-control" id="price" name="price" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="type" class="form-label">Type</label>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="type" id="qtr" value="QTR">
+                            <label class="form-check-label" for="qtr">QTR</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="type" id="mth" value="MTH">
+                            <label class="form-check-label" for="mth">MTH</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="type" id="saa" value="SAA">
+                            <label class="form-check-label" for="saa">SAA</label>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary" onclick="createSubscription()">Submit</button>
                     </div>
                 </form>
-                <button class="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600" onclick="modalHandler()" aria-label="close modal" role="button">
-                    <svg  xmlns="http://www.w3.org/2000/svg"  class="icon icon-tabler icon-tabler-x" width="20" height="20" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" />
-                        <line x1="18" y1="6" x2="6" y2="18" />
-                        <line x1="6" y1="6" x2="18" y2="18" />
-                    </svg>
-                </button>
             </div>
         </div>
     </div>
-</dh-component>
-<dh-component>
-    <div class="py-12 transition duration-150 ease-in-out z-10 absolute top-0 right-0 bottom-0 left-0 backdrop-blur-md" id="modal" aria-hidden="true" hidden>
-        <div role="alert" class="container mx-auto w-11/12 md:w-2/3 max-w-lg">
-            <div class="relative py-8 px-5 md:px-10 bg-white shadow-md rounded border border-gray-400">
-                <div class="w-full flex justify-start text-gray-600 mb-3">
-                    <svg  xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-wallet" width="52" height="52" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" />
-                        <path d="M17 8v-3a1 1 0 0 0 -1 -1h-10a2 2 0 0 0 0 4h12a1 1 0 0 1 1 1v3m0 4v3a1 1 0 0 1 -1 1h-12a2 2 0 0 1 -2 -2v-12" />
-                        <path d="M20 12v4h-4a2 2 0 0 1 0 -4h4" />
-                    </svg>
-                    <h1 class="text-gray-800 font-lg font-bold tracking-normal leading-tight mb-4">Request a Book</h1>
-                </div>
+</div>
 
-                <form method="post" id="request-form-2" class="space-y-4">
+<div class="modal fade" id="modal-2" tabindex="-1" aria-labelledby="modal-2-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-2-label">Create Item</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="request-form-2">
                     {% csrf_token %}
-                    <label for="name">Name</label>
-                    <input type="text" name="name" id="name" class="border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#AA3855] transition duration-150 ease-in-out w-full" required>
-                    <label for="quantity">Quantity</label>
-                    <input type="number" name="quantity" id="quantity" class="border border-gray-400 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#AA3855] transition duration-150 ease-in-out w-full" required>
-                    
-
-                    <div class="flex items-center justify-start w-full">
-                        <button class="focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#AA3855] transition duration-150 ease-in-out hover:bg-[#AA3855] bg-[#C44B6A] rounded text-white px-8 py-2 text-sm" onclick="createItem()">Submit</button>
-                        <button class="focus:outline-none focus:ring-2 focus:ring-offset-2  focus:ring-gray-400 ml-3 bg-gray-100 transition duration-150 text-gray-600 ease-in-out hover:border-gray-400 hover:bg-gray-300 border rounded px-8 py-2 text-sm" onclick="modalHandler()">Cancel</button>
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="name" name="name" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="quantity" class="form-label">Quantity</label>
+                        <input type="number" class="form-control" id="quantity" name="quantity" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary" onclick="createItem()">Submit</button>
                     </div>
                 </form>
-                <button class="cursor-pointer absolute top-0 right-0 mt-4 mr-5 text-gray-400 hover:text-gray-600 transition duration-150 ease-in-out rounded focus:ring-2 focus:outline-none focus:ring-gray-600" onclick="modalHandler()" aria-label="close modal" role="button">
-                    <svg  xmlns="http://www.w3.org/2000/svg"  class="icon icon-tabler icon-tabler-x" width="20" height="20" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                        <path stroke="none" d="M0 0h24v24H0z" />
-                        <line x1="18" y1="6" x2="6" y2="18" />
-                        <line x1="6" y1="6" x2="18" y2="18" />
-                    </svg>
-                </button>
             </div>
         </div>
     </div>
-</dh-component>
+</div>
 <h1>Subscription Box Manager</h1>
-<table>
-    <thead>
-        <tr>
-            <th>Subscription Box</th>
-            <th>Price</th>
-            <th>Type</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for subscription_box in subscription_boxes %}
-        <tr>
-            <td>{{ subscription_box.name }}</td>
-            <td>{{ subscription_box.price }}</td>
-            <td>{{ subscription_box. }}</td>
-            <td>
-                <a href="{% url 'subscription_box:get_subscription' subscription_box.id %}">Edit</a>
-                <a href="{% url 'subscription_box:delete' subscription_box.id %}">Delete</a>
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<div class="container mt-4 flex justify-between">
+    <div class="card mb-3">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+                <h2>Subscription Boxes</h2>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-1" id="create-box">Add Subscription Box</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table hover" id="boxesTable">
+                <thead>
+                    <tr>
+                        <th>Subscription Box</th>
+                        <th>Price</th>
+                        <th>Type</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for box in boxes %}
+                    <tr>
+                        <td>{{ box.name }}</td>
+                        <td>{{ box.price }}</td>
+                        <td>{{ box.type }}</td>
+                        <td>
+                            <a class="btn btn-outline-primary" href="{% url 'subscription_box:get_subscription' box.id %}">Detail</a>
+                            <button class="btn btn-outline-danger"  onclick="deleteBox('{{box.id}}')" method="POST">Delete</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-<button onclick=modalHandler(true)>
+<div class="container mt-4 flex justify-between">
+    <div class="card mb-3">
+        <div class="card-header">
+            <div class="d-flex justify-content-between align-items-center">
+            <h2>Items</h2>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-2" id="create-item">Add Item</button>
+            </div>
+        </div>
+        <div class="card-body">
+            <table class="table hover">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Quantity</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>
+                            <a class="btn btn-outline-primary" href="{% url 'subscription_box:get_item' item.id %}">Detail</a>
+                            <button class="btn btn-outline-danger" onclick="deleteItem('{{item.id}}')" method="POST">Delete</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
-<table>
-    <thead>
-        <tr>
-            <th>Item</th>
-            <th>Quantity</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for item in items %}
-        <tr>
-            <td>{{ item.name }}</td>
-            <td>{{ item.quantity }}</td>
-            <td>
-                <a href="{% url 'subscription_box:get_item' item.id %}">Edit</a>
-                <a href="{% url 'subscription_box:item_delete' item.id %}">Delete</a>
-            </td>
-        </tr>
-        {% endfor %}
-</table>
 
-<a href="{% url 'subscription_box:item_create' %}">Create New Item</a>
 
-{% endblock content %}
-
-{% block scripts %}
 
 <script>
-    async function deleteItem(itemId) {
-        const response = await fetch(`/subscription_box/item/delete/${itemId}/`, {
-            method: 'DELETE',
+    function deleteItem(itemId) {
+        console.log("deleteItem called with id:", itemId);
+        const response = fetch(`/manage/item/delete/${itemId}`, {
+            method: 'POST',
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}'
             }
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.reload();
+                refreshItem();
+            }
         });
-
-        if (response.ok) {
-            window.location.reload();
-        }
     }
 
-    async function deleteSubscriptionBox(subscriptionBoxId) {
-        const response = await fetch(`/subscription-box/delete/${subscriptionBoxId}/`, {
-            method: 'DELETE',
+    function deleteBox(boxId) {
+        console.log("deleteBox called with id:", boxId);
+        const response = fetch(`/manage/box/delete/${boxId}`, {
+            method: 'POST',
             headers: {
                 'X-CSRFToken': '{{ csrf_token }}'
             }
+        })
+        .then(response => {
+            if (response.ok) {
+                window.location.reload();
+                refreshBox();
+            }
         });
-
-        if (response.ok) {
-            window.location.reload();
-        }
     }
 
     async function refreshBox() {
-        const response = await fetch('/subscription-box/viewAll', {
-            method: 'GET',
-            headers: {
-                'X-CSRFToken': '{{ csrf_token }}'
-            }
+        const response = await fetch('{% url "subscription_box:all_subscriptions" %}' );
+        const data = await response.json();
+        console.log(data);
+        const table = document.getElementById('boxesTable');
+        const tbody = table.querySelector('tbody');
+        tbody.innerHTML = '';
+        data.forEach(box => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${box.name}</td>
+                <td>${box.price}</td>
+                <td>${box.type}</td>
+                <td>
+                    <button class="btn btn-outline-primary" onclick="editBox(${box.id})">Detail</button>
+                    <button class="btn btn-outline-danger" onclick="deleteBox('${box.id}')" method="POST">Delete</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
         });
     }
 
     async function refreshItem() {
-        const response = await fetch('/subscription-box/item/viewAll', {
-            method: 'GET',
-            headers: {
-                'X-CSRFToken': '{{ csrf_token }}'
-            }
+        const response = await fetch('{% url "subscription_box:all_items" %}');
+        const data = await response.json();
+        const table = document.getElementById('itemsTable');
+        const tbody = table.querySelector('tbody');
+        tbody.innerHTML = '';
+        data.forEach(item => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td>${item.name}</td>
+                <td>${item.quantity}</td>
+                <td>
+                    <button class="btn btn-outline-primary" onclick="editItem(${item.id})">Detail</button>
+                    <button class="btn btn-outline-danger" onclick="deleteItem('${item.id}')" method="POST">Delete</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
         });
     }
 
     function createSubscription() {
         const form = document.getElementById('request-form-1');
-        const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
-        fetch('/subscription-box/create', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': '{{ csrf_token }}'
-            },
-            body: JSON.stringify(data)
-        }).then(response => {
+        fetch('/manage/box/create', {
+            method: "POST",
+            body: new FormData(form)
+        })
+        .then((response) => {
             if (response.ok) {
+                refreshBox();   
                 window.location.reload();
             }
-        });
+        });  
     }
 
     function createItem() {
         const form = document.getElementById('request-form-2');
         const formData = new FormData(form);
-        const data = Object.fromEntries(formData.entries());
-        fetch('/subscription-box/item/create', {
+        fetch('/manage/item/create', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': '{{ csrf_token }}'
-            },
-            body: JSON.stringify(data)
+            body: formData
         }).then(response => {
             if (response.ok) {
                 window.location.reload();
+                refreshItem();
             }
         });
     }
 
-    window.onload = function(){
+    window.onload = async function(){
         refreshBox();
         refreshItem();
     }
 </script>
-<script>
+{% endblock content %}
 
-    let modal = document.getElementById("modal");
-    function modalHandler(val) {
-        if (val) {
-            fadeIn(modal);
-        } else {
-            fadeOut(modal);
-        }
-    }
-    function fadeOut(el) {
-        el.style.opacity = 1;
-        (function fade() {
-            if ((el.style.opacity -= 0.1) < 0) {
-                el.style.display = "none";
-            } else {
-                requestAnimationFrame(fade);
-            }
-        })();
-    }
-    function fadeIn(el, display) {
-        el.style.opacity = 0;
-        el.style.display = display || "flex";
-        (function fade() {
-            let val = parseFloat(el.style.opacity);
-            if (!((val += 0.2) > 1)) {
-                el.style.opacity = val;
-                requestAnimationFrame(fade);
-            }
-        })();
-    }
-</script>
-{% endblock scripts %}

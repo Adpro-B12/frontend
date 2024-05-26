@@ -5,153 +5,176 @@ from django.core import serializers
 import django.contrib.messages as message
 # Create your views here.
 
-url = 'http://35.240.230.131'
+URL = 'http://35.240.230.131'
 
 def manager(request):
-    response = requests.get('http://35.240.230.131/subscription-box/viewAll')
-    box = response.json()
-    
-    response = requests.get('http://35.240.230.131/item/getAll')
-    item = response.json()
-    context = {
-        'box': box,
-        'item' : item
-    }
-    return render(request, 'subscription_management/manager.html', context)
+    if is_admin(request):
+        response = requests.get('http://35.240.230.131/subscription-box/viewAll')
+        print(response)
+        box = response.json()
+        print(box)
+        
+        response = requests.get('http://35.240.230.131/item/getAll')
+        print(response)
+        item = response.json()
+        context = {
+            'boxes': box,
+            'items' : item
+        }
+        return render(request, 'manager.html', context)
+    return redirect('homepage:show_homepage')
 
 
 def create_subscription(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        type = request.POST.get('type')
-        price = request.POST.get('price')
+    if is_admin(request):
+        if request.method == 'POST':
+            name = request.POST.get('name')
+            type = request.POST.get('type')
+            price = request.POST.get('price')
 
-        data = serializers.serialize('json', [
-            {
-                'name': name,
-                'type': type, 
-                'price': price
-            }
-        ])
-        
-        response = requests.post('http://35.240.230.131/subscription-box/create', data=data, headers={'Content-Type': 'application/json'})
-        res = response.json()
-        return HttpResponse(content=res,status=200)
-    else:
-        message.info(request, 'Invalid request method')
-        return HttpResponse(status=405)
+            data = {
+                    'name': name,
+                    'type': type, 
+                    'price': price
+                    }
+            
+            response = requests.post(URL+'/subscription-box/create', json=data, headers={'Content-Type': 'application/json'})
+            print(response)
+            res = response.json()
+            print(res)
+            return HttpResponse(redirect('subscription_box:manager'), status=200)
+        else:
+            message.info(request, 'Invalid request method')
+            return HttpResponse(status=405)
+    return redirect('homepage:show_homepage')
     
-def update_subscription(request):
-    if request.method == 'POST':
-        id = request.POST.get('id')
-        name = request.POST.get('name')
-        type = request.POST.get('type')
-        price = request.POST.get('price')
+def update_subscription(request,id):
+    if is_admin(request):
+        if request.method == 'POST':
+            name = request.POST.get('name')
+            type = request.POST.get('type')
+            price = request.POST.get('price')
 
-        data = serializers.serialize('json', [
-            {
-                'name': name,
-                'type': type, 
-                'price': price
-            }
-        ])
+            data = {
+                    'name': name,
+                    'type': type, 
+                    'price': price
+                    }
+            
+            
+            response = requests.put(URL+"/subscription-box/update/"+str(id), json=data, headers={'Content-Type': 'application/json'})
+            print(response)
+            return HttpResponse(status=200)
         
-        response = requests.put(url+"/subscription-box/update/"+id, data=data, headers={'Content-Type': 'application/json'})
-        res = response.json()
-        return HttpResponse(content=res,status=200)
+        else:
+            message.info(request, 'Invalid request method')
+            return HttpResponse(status=405)
+    return redirect('homepage:show_homepage')
     
-    else:
-        message.info(request, 'Invalid request method')
-        return HttpResponse(status=405)
-    
-def delete_subscription(request):
-    if request.method == 'POST':
-        id = request.POST.get('id')
+def delete_subscription(request,id):
+    if is_admin(request):
+        if request.method == 'POST':
+            
+            response = requests.delete(URL+"/subscription-box/delete/"+str(id))
+            res = response.json()
+            return HttpResponse(content=res,status=200)
         
-        response = requests.delete(url+"/subscription-box/delete/"+id)
-        res = response.json()
-        return HttpResponse(content=res,status=200)
-    
-    else:
-        message.info(request, 'Invalid request method')
-        return HttpResponse(status=405)
+        else:
+            message.info(request, 'Invalid request method')
+            return HttpResponse(status=405)
+    return redirect('homepage:show_homepage')
     
 def create_item(request):
-    if request.method == 'POST':
-        name = request.POST.get('name')
-        quantity = request.POST.get('quantity')
+    if is_admin(request):
+        if request.method == 'POST':
+            name = request.POST.get('name')
+            quantity = request.POST.get('quantity')
 
-        data = serializers.serialize('json', [
-            {
-                'name': name,
-                'quantity': quantity,
-            }
-        ])
+            data = {
+                    'name': name,
+                    'quantity': quantity,
+                    }
+            
+            response = requests.post(URL+"/item/create", json=data, headers={'Content-Type': 'application/json'})
+            print(response)
+            res = response.json()
+            print(res)
+            return HttpResponse(redirect('subscription_box:manager'), status=200)
         
-        response = requests.post(url+"/item/create", data=data, headers={'Content-Type': 'application/json'})
-        res = response.json()
-        return HttpResponse(content=res,status=200)
+        else:
+            message.info(request, 'Invalid request method')
+            return HttpResponse(status=405)
+    return redirect('homepage:show_homepage')
     
-    else:
-        message.info(request, 'Invalid request method')
-        return HttpResponse(status=405)
-    
-def update_item(request):
-    if request.method == 'POST':
-        id = request.POST.get('id')
-        name = request.POST.get('name')
-        quantity = request.POST.get('quantity')
+def update_item(request,id):
+    if is_admin(request):
+        if request.method == 'POST':
+                name = request.POST.get('name')
+                quantity = request.POST.get('quantity')
 
-        data = serializers.serialize('json', [
-            {
-                'name': name,
-                'quantity': quantity
-            }
-        ])
+                print(name)
+                print(quantity)
+
+                data = {
+                    'name': name,
+                    'quantity': quantity
+                    }
+                
+                
+                response = requests.put(URL+"/item/edit/"+str(id), json=data, headers={'Content-Type': 'application/json'})
+                print(response)
+                return HttpResponse(redirect('subscription_box:get_item', id), status=200)
         
-        response = requests.put(url+"/item/update/"+id, data=data, headers={'Content-Type': 'application/json'})
-        res = response.json()
-        return HttpResponse(content=res,status=200)
+        else:
+            message.info(request, 'Invalid request method')
+            return HttpResponse(status=405)
+    return redirect('homepage:show_homepage')
     
-    else:
-        message.info(request, 'Invalid request method')
-        return HttpResponse(status=405)
-    
-def delete_item(request):
-    if request.method == 'POST':
-        id = request.POST.get('id')
+def delete_item(request,id):
+    if is_admin(request):
+        if request.method == 'POST':
+            
+            response = requests.delete(URL+"/item/delete/"+str(id))
+            res = response.json()
+            return HttpResponse(content=res,status=200)
         
-        response = requests.delete(url+"/item/delete/"+id)
-        res = response.json()
-        return HttpResponse(content=res,status=200)
-    
-    else:
-        message.info(request, 'Invalid request method')
-        return HttpResponse(status=405)
+        else:
+            message.info(request, 'Invalid request method')
+            return HttpResponse(status=405)
+    return redirect('homepage:show_homepage')
     
 def view_subscriptions(request, id):
-    response = requests.get(url+"/subscription-box/view/"+id)
+    response = requests.get(URL+"/subscription-box/viewDetails/"+str(id))
     box = response.json()
+    print(box)
     
     context = {
+        "id": id,
         'box': box,
     }
-    return render(request, 'subscription_box/box_detail.html', context)
+    return render(request, 'box_detail.html', context)
 
 def view_items(request,id):
-    response = requests.get(url+"/item/get/"+id)
+    response = requests.get(URL+"/item/get/"+str(id))
     item = response.json()
     context = {
+        "id": id,
         'item' : item
     }
-    return render(request, 'subscription_box/item_detail.html', context)
+    return render(request, 'item_detail.html', context)
 
 def get_subscription_ajax(request):
-    response = requests.get(url+"/subscription-box/viewAll")
+    response = requests.get(URL+"/subscription-box/viewAll")
     box = response.json()
     return HttpResponse(content=box, status=200)
 
 def get_item_ajax(request):
-    response = requests.get(url+"/item/getAll")
+    response = requests.get(URL+"/item/getAll")
     item = response.json()
     return HttpResponse(content=item, status=200)
+
+def is_admin(request):
+    role = request.COOKIES.get('role')
+    if role == 'ADMIN':
+        return True
+    return False
