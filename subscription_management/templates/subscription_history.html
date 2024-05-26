@@ -2,34 +2,39 @@
 {% load static %}
 
 {% block content %}
-
+<div class="container mt-4">
     <h1>Subscriptions</h1>
-
-
-    <form id="statusFilterForm">
-        Status: <input type="text" id="status" name="status">
-        <button type="button" onclick="filterSubscriptions()">Filter</button>
-    </form>
-    <table id="boxesTable">
-        <thead>
-            <tr>
-                <th>Unique Code</th>
-                <th>Status</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>ID Box</th>
-
-                
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-    <a href="{% url 'subscription_management:box_list' %}">Back to Subscription Box List</a>
-    <script src="{% static 'filter_subscriptions_subs.js' %}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            filterSubscriptions();
-        });
-    </script>
+    <div class="row">
+        <div class="col-md-6">
+            <form id="statusFilterForm" class="input-group mb-3">
+                <input type="text" id="status" name="status" class="form-control" placeholder="Filter by status...">
+                <button type="button" class="btn btn-primary" onclick="filterSubscriptions()">Filter</button>
+            </form>
+        </div>
+    </div>
+    <div class="table-responsive">
+        <table id="boxesTable" class="table table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Unique Code</th>
+                    <th>Status</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>ID Box</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+    <div class="my-3">
+        <a href="{% url 'subscription_management:box_list' %}" class="btn btn-secondary">Back to Subscription Box List</a>
+    </div>
+</div>
+<script src="{% static 'filter_subscriptions_subs.js' %}"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', (event) => {
+        filterSubscriptions();
+    });
+</script>
 {% endblock content %}

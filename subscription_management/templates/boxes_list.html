@@ -1,41 +1,52 @@
 {% extends 'base.html' %}
 {% load static %}
 
-
 {% block content %}
+    <div class="container mt-5">
+        <h1>Subscription Boxes</h1>
+        <div class="mb-3">
+            <a href="{% url 'subscription_management:subscription_history' %}" class="btn btn-primary">
+                See List Subscriptions
+            </a>
+        </div>
 
-    <h1>Subscription Boxes</h1>
+        <div class="mb-3">
+            <form id="priceFilterForm" class="row g-3">
+                <div class="col-auto">
+                    <label for="minPrice" class="form-label">Minimum Price:</label>
+                    <input type="number" class="form-control" id="minPrice" name="minPrice">
+                </div>
+                <div class="col-auto">
+                    <label for="maxPrice" class="form-label">Maximum Price:</label>
+                    <input type="number" class="form-control" id="maxPrice" name="maxPrice">
+                </div>
+                <div class="col-auto">
+                    <label for="name" class="form-label">Name:</label>
+                    <input type="text" class="form-control" id="name" name="name">
+                </div>
+                <div class="col-auto">
+                    <button type="button" class="btn btn-info" onclick="filterBoxes()">Filter</button>
+                </div>
+            </form>
+        </div>
 
-    <a href="{% url 'subscription_management:subscription_history' %}">
-        <button>
-            See List Subscriptions
-        </button>
-    </a>
-
-    <form id="priceFilterForm">
-        Minimum Price: <input type="number" id="minPrice" name="minPrice">
-        Maximum Price: <input type="number" id="maxPrice" name="maxPrice">
-        Name: <input type="text" id="name" name="name">
-        
-        <button type="button" onclick="filterBoxes()">Filter</button>
-    </form>
-    <table id="boxesTable">
-        <thead>
-            <tr>
-                <th>Name</th>
-                <th>Type</th>
-                <th>Price</th>
-                <th>Items</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
+        <table id="boxesTable" class="table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Type</th>
+                    <th>Price</th>
+                    <th>Items</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
     <script src="{% static 'filter_boxes.js' %}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             filterBoxes();
         });
     </script>
-
 {% endblock content %}

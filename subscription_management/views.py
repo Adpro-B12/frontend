@@ -10,16 +10,16 @@ def box_list(request):
     max_price = request.GET.get('maxPrice')
 
     if min_price and max_price:
-        response = requests.get(f'http://localhost:8080/api/subscriptions/price?minPrice={min_price}&maxPrice={max_price}')
+        response = requests.get(f'http://34.143.166.153/api/subscriptions/price?minPrice={min_price}&maxPrice={max_price}')
     else:
-        response = requests.get('http://localhost:8080/api/subscriptions/all')
+        response = requests.get('http://34.143.166.153/api/subscriptions/all')
 
         
     boxes = response.json()
     return render(request, 'boxes_list.html', {'boxes': boxes})
 
 def box_detail(request, box_id):
-    response = requests.get(f'http://localhost:8080/api/subscriptions/{box_id}')
+    response = requests.get(f'http://34.143.166.153/api/subscriptions/{box_id}')
     box = []
     try:
         box = response.json()
@@ -31,7 +31,7 @@ def box_detail(request, box_id):
 def subscribe(request, box_id):
     username = request.COOKIES.get('username')
     data = {'username': username}
-    response = requests.post(f'http://localhost:8080/api/subscriptions/subscribe/{box_id}', json=data)
+    response = requests.post(f'http://34.143.166.153/api/subscriptions/subscribe/{box_id}', json=data)
 
     subscription = response.json()
 
@@ -39,7 +39,7 @@ def subscribe(request, box_id):
     return responses
 
 def cancel(request, sub_id):
-    response = requests.post(f'http://localhost:8080/api/subscriptions/cancel/{sub_id}')
+    response = requests.post(f'http://34.143.166.153/api/subscriptions/cancel/{sub_id}')
     return HttpResponseRedirect(reverse('subscription_management:subscription_history'))
 
 def subscription_history(request):
@@ -47,7 +47,7 @@ def subscription_history(request):
     data = {'username': username}
 
     try:
-        response = requests.get('http://localhost:8080/api/subscriptions/subscriptions', json=data)
+        response = requests.get('http://34.143.166.153/api/subscriptions/subscriptions', json=data)
         subscriptions = response.json()
     except:
         subscriptions = []
@@ -57,15 +57,18 @@ def admin_list(request):
     return render(request, 'subscription_admin.html')
 
 def admin_cancel(request, sub_id):
-    response = requests.post(f'http://localhost:8080/api/subscriptions/set_status/{sub_id}', json={"status":"CANCELLED"})
+    role = request.COOKIES.get('role')
+    response = requests.post(f'http://34.143.166.153/api/subscriptions/set_status/{sub_id}', json={"status":"CANCELLED","role":role})
     return HttpResponseRedirect(reverse('subscription_management:admin_list'))
 
 def admin_pending(request, sub_id):
-    response = requests.post(f'http://localhost:8080/api/subscriptions/set_status/{sub_id}', json={"status":"PENDING"})
+    role = request.COOKIES.get('role')
+    response = requests.post(f'http://34.143.166.153/api/subscriptions/set_status/{sub_id}', json={"status":"PENDING","role":role})
     return HttpResponseRedirect(reverse('subscription_management:admin_list'))
 
 def admin_approve(request, sub_id):
-    response = requests.post(f'http://localhost:8080/api/subscriptions/set_status/{sub_id}', json={"status":"APPROVED"})
+    role = request.COOKIES.get('role')
+    response = requests.post(f'http://34.143.166.153/api/subscriptions/set_status/{sub_id}', json={"status":"APPROVED","role":role})
     return HttpResponseRedirect(reverse('subscription_management:admin_list'))
 
 
@@ -77,7 +80,7 @@ def fetch_boxes(request):
 
     # Construct the URL based on the provided parameters
     
-    url = f'http://localhost:8080/api/subscriptions/price?minPrice={min_price}&maxPrice={max_price}'
+    url = f'http://34.143.166.153/api/subscriptions/price?minPrice={min_price}&maxPrice={max_price}'
     response = requests.get(url)
     data = []
     try:
@@ -86,7 +89,7 @@ def fetch_boxes(request):
         data = []
 
     if name:
-        url = f'http://localhost:8080/api/subscriptions/name?name={name}'
+        url = f'http://34.143.166.153/api/subscriptions/name?name={name}'
 
         data2 = []
         try:
@@ -113,7 +116,7 @@ def fetch_subscriptions(request):
     username = request.COOKIES.get('username')
     data = {'username': username}
 
-    url = 'http://localhost:8080/api/subscriptions/subscriptions'
+    url = 'http://34.143.166.153/api/subscriptions/subscriptions'
     response = requests.get(url, json=data)
 
     data = []
@@ -124,7 +127,7 @@ def fetch_subscriptions(request):
 
     if status:
         print("STATUS", status)
-        url = f'http://localhost:8080/api/subscriptions/subscriptions_by_status?status={status}'
+        url = f'http://34.143.166.153/api/subscriptions/subscriptions_by_status?status={status}'
 
         data2 = []
         try: 
@@ -146,7 +149,7 @@ def fetch_subscriptions(request):
     return JsonResponse(data, safe=False)
 
 def get_all_subscriptions(request):
-    url = 'http://localhost:8080/api/subscriptions/allsubs'
+    url = 'http://34.143.166.153/api/subscriptions/allsubs'
     response = requests.get(url)
     data = []
     try:

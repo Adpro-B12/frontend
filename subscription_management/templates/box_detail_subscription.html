@@ -2,20 +2,29 @@
 {% load static %}
 
 {% block content %}
-    <h1>{{ box.name }}</h1>
-    <p>Type: {{ box.type }}</p>
-    <p>Price: {{ box.price }}</p>
-    <h2>Items</h2>
-    <ul>
-        {% for item in box.items %}
-            <li>{{ item.name }} (Quantity: {{ item.quantity }})</li>
-        {% endfor %}
-    </ul>
-    <!-- Subscribe Button -->
-    <form action="{% url 'subscription_management:subscribe' box.id %}" method="POST">
-        {% csrf_token %} <!-- CSRF token for security -->
-        <button type="submit">Subscribe</button>
-    </form>
-    <a href="{% url 'subscription_management:box_list' %}">Back to Subscription Box List</a>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                <h1 class="card-title">{{ box.name }}</h1>
+            </div>
+            <div class="card-body">
+                <p class="card-text"><strong>Type:</strong> {{ box.type }}</p>
+                <p class="card-text"><strong>Price:</strong> {{ box.price }}</p>
+                <h2>Items</h2>
+                <ul class="list-group list-group-flush">
+                    {% for item in box.items %}
+                        <li class="list-group-item">{{ item.name }} (Quantity: {{ item.quantity }})</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <!-- Subscribe Button -->
+            <div class="card-footer">
+                <form action="{% url 'subscription_management:subscribe' box.id %}" method="POST">
+                    {% csrf_token %} <!-- CSRF token for security -->
+                    <button type="submit" class="btn btn-primary">Subscribe</button>
+                </form>
+                <a href="{% url 'subscription_management:box_list' %}" class="btn btn-link">Back to Subscription Box List</a>
+            </div>
+        </div>
+    </div>
 {% endblock content %}
-

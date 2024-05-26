@@ -1,31 +1,68 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block meta %}
+<style>
+    body {
+        font-family: Arial, sans-serif; /* Ensures the font is consistent and readable */
+    }
+    .container {
+        max-width: 960px; /* Limits the width of the container for better readability */
+        margin: auto; /* Centers the container horizontally */
+        padding-top: 20px;
+    }
+    h1 {
+        color: #333; /* Dark grey color for the header */
+    }
+    .table {
+        margin-top: 20px; /* Adds space above the table */
+    }
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f9f9f9; /* Light grey for odd rows */
+    }
+    .table-dark {
+        background-color: #343a40; /* Dark background for the table header */
+        color: white; /* White text for contrast */
+    }
+    .btn-outline-secondary {
+        border-color: #007bff; /* Blue border for the button */
+        color: #007bff; /* Blue text */
+    }
+    .btn-outline-secondary:hover {
+        background-color: #007bff; /* Blue background on hover */
+        color: white; /* White text on hover */
+    }
+    .btn-link {
+        color: #007bff; /* Styles the 'Back to Subscription Box List' link as blue */
+        text-decoration: none; /* Removes underline from the link */
+    }
+    .btn-link:hover {
+        text-decoration: underline; /* Adds underline on hover for better usability */
+    }
+</style>
+{% endblock meta %}
+
 {% block content %}
+    <div class="container mt-5">
+        <h1>Subscriptions</h1>
 
-    <h1>Subscriptions</h1>
 
-
-    <form id="priceFilterForm">
-        Status: <input type="text" id="status" name="status">
-        <button type="button" onclick="allSubscriptions()">Filter</button>
-    </form>
-    <table id="boxesTable">
-        <thead>
-            <tr>
-                <th>Unique Code</th>
-                <th>Status</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th>ID Box</th>
-
-                
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-    <a href="{% url 'subscription_management:box_list' %}">Back to Subscription Box List</a>
+        <table id="boxesTable" class="table table-striped">
+            <thead class="table-dark">
+                <tr>
+                    <th>Unique Code</th>
+                    <th>Status</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>ID</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        
+        <a href="{% url 'subscription_management:box_list' %}" class="btn btn-link">Back to Subscription Box List</a>
+    </div>
     <script src="{% static 'subscription_admin.js' %}"></script>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
