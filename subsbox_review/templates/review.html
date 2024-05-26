@@ -29,6 +29,7 @@
             margin: 10px 0;
             background-color: #fafafa;
             box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
         }
         .card h3 {
             margin-top: 0;
@@ -53,6 +54,20 @@
         .create-button:hover {
             background-color: #218838;
         }
+        .delete-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .delete-button:hover {
+            background-color: #c82333;
+        }
     </style>
 </head>
 <body>
@@ -64,6 +79,10 @@
             <h6>Box: {{ review.subscriptionBoxId }}</h6>
             <p>Rating: {{ review.ratingScore }}</p>
             <p>Review: {{ review.review }}</p>
+            <form method="POST" action="{% url 'subsbox_review:delete_review' review_id=review.reviewId %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="delete-button">Delete</button>
+            </form>
         </div>
         {% endfor %}
     </div>

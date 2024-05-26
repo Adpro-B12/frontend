@@ -51,5 +51,28 @@ def create_review(request):
         messages.info(request, 'Invalid method.')
         return render(request, 'create_review.html')
     
+def delete_review(request, review_id):
+    username = request.COOKIES.get('username')
+    if username:
+        try:
+            # Fetch the review details
+            response = requests.get(f'http://34.87.138.18/api/reviews/{review_id}')
+            response.raise_for_status()
+            review = response.json()
 
-# def get_review_byId(request):
+            # Check if the review belongs to the current user
+            if review.get('userId') == username:
+                delete_response = requests.delete(f'http://34.87.138.18/api/reviews/delete/{review_id}')
+                if delete_response.status_code == 204:
+                    messages.success(request, 'Review deleted successfully.')
+                else:
+                    messages.error(request, 'Failed to delete review.')
+            else:
+                messages.error(request, 'You are not authorized to delete this review.')
+        except requests.exceptions.RequestException as e:
+            print("Error fetching or deleting review:", e)
+            messages.error(request, 'Failed to delete review.')
+    else:
+        messages.error(request, 'User is not authenticated.')
+
+    return redirect('subsbox_review:review_list')
