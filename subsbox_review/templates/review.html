@@ -58,7 +58,7 @@
 <body>
     <div class="container">
         <h1>Test Review Page</h1>
-        <a href="/create_review" class="create-button">Create Review</a>
+        <a href="{% url 'subsbox_review:create_review'%}" class="create-button">Create Review</a>
         {% for review in reviews %}
         <div class="card">
             <h3>Rating: {{ review.rating_score }}</h3>
@@ -68,6 +68,4 @@
     </div>
 </body>
 </html>
-
-
 {% endblock content %}
