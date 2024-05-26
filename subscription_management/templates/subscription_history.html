@@ -26,5 +26,11 @@
         Back to Box List
     </button>
 </div>
+
+<div class="d-flex justify-content-center mt-3">
+    <button onclick="location.href=`{% url 'subscription_management:admin_list' %}`" type="button" class="btn btn-success">
+        Manage all Subscriptions
+    </button>
+</div>
 <script src="{% static 'filter_subscriptions_subs.js' %}"></script>
 {% endblock content %}
