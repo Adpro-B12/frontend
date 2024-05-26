@@ -21,7 +21,9 @@
                     <div>
                         <label for="box">Box</label>
                         <select class="form-control" id="subscriptionBoxId" name="subscriptionBoxId">
-                            <!-- Options will be populated by JavaScript -->
+                            {% for box in subscription_boxes %}
+                                <option value="{{ box.id }}">{{ box.name }}</option>
+                            {% endfor %}
                         </select>
                     </div>
                     <div class="form-group">
@@ -47,25 +49,6 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            fetch('http://34.143.166.153/api/subscriptions/all')
-                .then(response => response.json())
-                .then(data => {
-                    const subscriptionBoxId = document.getElementById('subscriptionBoxId');
-                    data.forEach(box => {
-                        const option = document.createElement('option');
-                        option.value = box.id; // menggunakan id dari API
-                        option.textContent = box.name;
-                        subscriptionBoxId.appendChild(option);
-                    });
-                })
-                .catch(error => {
-                    console.error('Error fetching subscription boxes:', error);
-                });
-            });
-
-    </script>
-</body>
+    </body>
 </html>
 {% endblock content %}
