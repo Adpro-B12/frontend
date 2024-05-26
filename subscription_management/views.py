@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseForbidden, HttpResponseRedirect, JsonResponse
 from django.urls import reverse
 import requests
 from django.shortcuts import render
@@ -54,6 +54,9 @@ def subscription_history(request):
     return render(request, 'subscription_history.html', {'subscriptions': subscriptions})
 
 def admin_list(request):
+    role = request.COOKIES.get('role')
+    if(role!="ADMIN"):
+        return HttpResponseForbidden("Access denied: You do not have the necessary permissions to view this page.")
     return render(request, 'subscription_admin.html')
 
 def admin_cancel(request, sub_id):

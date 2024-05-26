@@ -62,7 +62,10 @@ def login(request):
         if r.status_code == 200:
             response_data = r.json().get("data", {})
             token = response_data.get("token")
-            role = response_data.get("role")  # Akses role pengguna
+
+            r = requests.get(f"http://34.126.177.181/auth/profiles/{username}", headers=headers)
+            profile = r.json() if r.status_code == 200 else None
+            role = profile.get('role', None)
             
             if token:
                 resp = redirect(reverse("authentication:profile_detail", kwargs={"username": username}))
