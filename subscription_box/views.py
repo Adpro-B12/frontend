@@ -9,7 +9,7 @@ URL = 'http://35.240.230.131'
 
 def manager(request):
     if is_admin(request):
-        response = requests.get('http://35.240.230.131/subscription-box/viewAll')
+        response = requests.get('http://35.240.230.131/subscription-box/getAll')
         print(response)
         box = response.json()
         print(box)
@@ -164,7 +164,7 @@ def view_items(request,id):
     return render(request, 'item_detail.html', context)
 
 def get_subscription_ajax(request):
-    response = requests.get(URL+"/subscription-box/viewAll")
+    response = requests.get(URL+"/subscription-box/getAll")
     box = response.json()
     return HttpResponse(content=box, status=200)
 
