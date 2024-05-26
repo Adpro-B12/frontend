@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+<title>Subscription Box Detail</title>
+{% endblock meta %}
+
+{% block content %}
+<h1>Subscription Box Detail</h1>
+<h2>{{ box.name }}</h2>
+<p>{{ box.price }}</p>
+<p>{{ box.type }}</p>
+
+<h2>Items</h2>
+<ul>
+    {% for item in box.items.all %}
+    <li>{{ item.name }} - {{ item.quantity }}</li>
+    {% endfor %}
+</ul>
+
+<div id="edit" style="display: none;">
+    <form method="POST" action="{% url 'subscription_box:edit' box.id %}">
+        {% csrf_token %}
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" value="{{ box.name }}">
+        <br>
+        <label for="price">Price:</label>
+        <input type="number" id="price" name="price" value="{{ box.price }}">
+        <br>
+        <label for="type">Type:</label>
+        <input type="text" id="type" name="type" value="{{ box.type }}">
+        <br>
+        <input type="submit" value="Save">
+    </form>
+</div>
+<button onclick=showEditForm()>Edit</button>
+<a href="{% url 'subscription_box:delete' box.id %}">Delete</a>
+{% endblock content %}
+
+{% block scripts %}
+<script>
+    async function deleteBox(boxId) {
+        const response = await fetch(`/subscription_box/delete/${boxId}/`, {
+            method: 'DELETE',
+            headers: {
+                'X-CSRFToken': Cookies.get('csrftoken')
+            }
+        });
+
+        if (response.ok) {
+            window.location.href = '/subscription_box/';
+        }
+    }
+
+    function showEditForm() {
+        document.getElementById('edit').style.display = 'block';
+    }
+</script>
+
+{% endblock scripts %}
+
+
