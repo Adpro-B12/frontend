@@ -34,7 +34,7 @@ def register(request):
         headers = {'Content-Type': 'application/json'}
 
         # Post the data
-        r = requests.post("http://localhost:8081/auth/register", data=data, headers=headers)
+        r = requests.post("http://34.126.177.181/auth/register", data=data, headers=headers)
         if r.status_code == 200:
             print('success reg')
             return redirect("authentication:login")  # make sure to use the correct namespace and URL name
@@ -56,7 +56,7 @@ def login(request):
         headers = {'Content-Type': 'application/json'}
 
         print('data:', data)
-        r = requests.post("http://localhost:8081/auth/login", data=data, headers=headers)
+        r = requests.post("http://34.126.177.181/auth/login", data=data, headers=headers)
         
         if r.status_code == 200:
             print('success login')

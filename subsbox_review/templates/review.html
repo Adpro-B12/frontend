@@ -1,17 +1,73 @@
+{% extends 'base.html' %}
+{% block content %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Review HTML</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .card {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 10px 0;
+            background-color: #fafafa;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .card h3 {
+            margin-top: 0;
+            color: #555;
+        }
+        .card p {
+            margin-bottom: 0;
+            color: #666;
+        }
+        .create-button {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            text-align: center;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .create-button:hover {
+            background-color: #218838;
+        }
+    </style>
 </head>
 <body>
-    <h1>Test Review Page</h1>
-    <ul>
+    <div class="container">
+        <h1>Test Review Page</h1>
+        <a href="/create_review" class="create-button">Create Review</a>
         {% for review in reviews %}
-        <li>
+        <div class="card">
             <h3>Rating: {{ review.rating_score }}</h3>
             <p>Review: {{ review.review }}</p>
-        </li>
+        </div>
         {% endfor %}
-    </ul>
+    </div>
 </body>
 </html>
+
+
+{% endblock content %}

@@ -1,6 +1,6 @@
 import django.contrib.messages as message
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 import requests
 from django.core import serializers
 
@@ -12,7 +12,6 @@ def get_all_reviews(request):
     return render(request, 'review.html', {'reviews': reviews})
 
 def create_review(request):
-    user_id = requests.GET.get('userId')
     if request.method == 'POST':
         rating = request.POST.get('rating')
         review = request.POST.get('review')
@@ -24,10 +23,9 @@ def create_review(request):
             }
         ])
 
-        response = request.post('http://34.87.138.18/api/reviews/create', data=data, headers={'Content-Type': 'application/json'})
+        response = requests.post('http://34.87.138.18/api/reviews/create', data=data, headers={'Content-Type': 'application/json'})
         res = response.json()
-        return HttpResponse(content=res, status=200)
-    
+        return redirect('subsbox_review:review_list')
     else:
         message.info(request, 'Invalid')
-        return HttpResponse(status=405)
+        return render(request, 'create_review.html')
