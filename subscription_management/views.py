@@ -20,8 +20,13 @@ def box_list(request):
 
 def box_detail(request, box_id):
     response = requests.get(f'http://localhost:8080/api/subscriptions/{box_id}')
-    box = response.json()
-    return render(request, 'box_detail.html', {'box': box})
+    box = []
+    try:
+        box = response.json()
+    except:
+        box = []
+    print("TESTTT")
+    return render(request, 'box_detail_subscription.html', {'box': box})
 
 def subscribe(request, box_id):
     username = request.COOKIES.get('username')
@@ -74,11 +79,20 @@ def fetch_boxes(request):
     
     url = f'http://localhost:8080/api/subscriptions/price?minPrice={min_price}&maxPrice={max_price}'
     response = requests.get(url)
-    data = response.json()
+    data = []
+    try:
+        data = response.json()
+    except:
+        data = []
 
     if name:
         url = f'http://localhost:8080/api/subscriptions/name?name={name}'
-        data2 = requests.get(url).json()
+
+        data2 = []
+        try:
+            data2 = requests.get(url).json()
+        except:
+            data2 = []
 
         dict1 = {item['id']: item for item in data}
         dict2 = {item['id']: item for item in data2}
@@ -94,19 +108,29 @@ def fetch_boxes(request):
     return JsonResponse(data, safe=False)
 
 def fetch_subscriptions(request):
-    status = request.GET.get('name', None)
+    status = request.GET.get('status', None)
         
     username = request.COOKIES.get('username')
     data = {'username': username}
 
     url = 'http://localhost:8080/api/subscriptions/subscriptions'
     response = requests.get(url, json=data)
-    data = response.json()
-    
+
+    data = []
+    try:
+        data = response.json()
+    except:
+        data = []
 
     if status:
-        url = f'http://localhost:8080/api/subscriptions/status?status={status}'
-        data2 = requests.get(url).json()
+        print("STATUS", status)
+        url = f'http://localhost:8080/api/subscriptions/subscriptions_by_status?status={status}'
+
+        data2 = []
+        try: 
+            data2 = requests.get(url).json()
+        except:
+            data2 = []
 
         dict1 = {item['id']: item for item in data}
         dict2 = {item['id']: item for item in data2}
@@ -124,7 +148,11 @@ def fetch_subscriptions(request):
 def get_all_subscriptions(request):
     url = 'http://localhost:8080/api/subscriptions/allsubs'
     response = requests.get(url)
-    data = response.json()
+    data = []
+    try:
+        data = response.json()
+    except:
+        data = []
     return JsonResponse(data, safe=False)
 
     

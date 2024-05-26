@@ -2,7 +2,8 @@ async function filterSubscriptions() {
     let name = document.getElementById('status').value;
     let apiUrl = '../fetch_subscriptions/';
 
-    if(name) apiUrl += `&status=${name}`;
+    console.log("AKSKKOEKODEO");
+    if(name) apiUrl += `?status=${name}`;
     
 
     fetch(apiUrl)

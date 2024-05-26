@@ -16,6 +16,7 @@
         Minimum Price: <input type="number" id="minPrice" name="minPrice">
         Maximum Price: <input type="number" id="maxPrice" name="maxPrice">
         Name: <input type="text" id="name" name="name">
+        
         <button type="button" onclick="filterBoxes()">Filter</button>
     </form>
     <table id="boxesTable">
@@ -31,5 +32,10 @@
         </tbody>
     </table>
     <script src="{% static 'filter_boxes.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            filterBoxes();
+        });
+    </script>
 
 {% endblock content %}

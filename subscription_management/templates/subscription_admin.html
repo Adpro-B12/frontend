@@ -27,4 +27,9 @@
     </table>
     <a href="{% url 'subscription_management:box_list' %}">Back to Subscription Box List</a>
     <script src="{% static 'subscription_admin.js' %}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            allSubscriptions();
+        });
+    </script>
 {% endblock content %}
