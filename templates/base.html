@@ -34,7 +34,7 @@
                                     <li><a class="dropdown-item" href="{% url 'subscription_management:box_list'%}">Subscription</a></li>
                                     <li><a class="dropdown-item" href="{% url 'subscription_box:manager'%}">Subscription Box</a></li>
                                     <li><a class="dropdown-item" href="{% url 'subsbox_review:review_list'%}">Review</a></li>
-                                   
+                                    <li><a class="dropdown-item" href="{% url 'authentication:profile_detail' request.COOKIES.username %}">My Profile</a></li>
                                 </ul>
                             </li>
                         </ul>
