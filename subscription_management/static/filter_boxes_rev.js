@@ -25,7 +25,7 @@ function updateBoxesCards(boxes) {
                 <div class="card-body">
                     <h5 class="card-title">${box.name}</h5>
                     <p class="card-text"><strong>Type:</strong> ${box.type}</p>
-                    <p class="card-text"><strong>Price:</strong> $${box.price}</p>
+                    <p class="card-text"><strong>Price:</strong> ${box.price}</p>
                     <ul class="list-unstyled">
                         ${box.items.map(item => `<li>${item.name} (Quantity: ${item.quantity})</li>`).join('')}
                     </ul>

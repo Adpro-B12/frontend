@@ -3,6 +3,7 @@ from django.urls import reverse
 import requests
 from django.shortcuts import render
 
+clar = 'http://35.240.230.131/subscription-box'
 def box_list(request):
 
 
@@ -10,16 +11,16 @@ def box_list(request):
     max_price = request.GET.get('maxPrice')
 
     if min_price and max_price:
-        response = requests.get(f'http://34.143.166.153/api/subscriptions/price?minPrice={min_price}&maxPrice={max_price}')
+        response = requests.get(clar + f'/price?minPrice={min_price}&maxPrice={max_price}')
     else:
-        response = requests.get('http://34.143.166.153/api/subscriptions/all')
+        response = requests.get(clar+'/getAll')
 
         
     boxes = response.json()
     return render(request, 'boxes_list.html', {'boxes': boxes})
 
 def box_detail(request, box_id):
-    response = requests.get(f'http://34.143.166.153/api/subscriptions/{box_id}')
+    response = requests.get(clar+f'/viewDetails/{box_id}')
     box = []
     try:
         box = response.json()
@@ -30,10 +31,17 @@ def box_detail(request, box_id):
 
 def subscribe(request, box_id):
     username = request.COOKIES.get('username')
-    data = {'username': username}
+    response = requests.get(clar+f'/viewDetails/{box_id}')
+    box = []
+    try:
+        box = response.json()
+    except:
+        box = []
+    print("TESTTT")
+    type = box['type']
+    data = {'username': username, 'type':type}
     response = requests.post(f'http://34.143.166.153/api/subscriptions/subscribe/{box_id}', json=data)
 
-    subscription = response.json()
 
     responses = HttpResponseRedirect(reverse('subscription_management:box_list'))
     return responses
@@ -83,7 +91,7 @@ def fetch_boxes(request):
 
     # Construct the URL based on the provided parameters
     
-    url = f'http://34.143.166.153/api/subscriptions/price?minPrice={min_price}&maxPrice={max_price}'
+    url = clar+f'/price?minPrice={min_price}&maxPrice={max_price}'
     response = requests.get(url)
     data = []
     try:
@@ -92,7 +100,7 @@ def fetch_boxes(request):
         data = []
 
     if name:
-        url = f'http://34.143.166.153/api/subscriptions/name?name={name}'
+        url = clar+f'/name?name={name}'
 
         data2 = []
         try:
