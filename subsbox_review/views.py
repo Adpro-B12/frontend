@@ -6,27 +6,6 @@ from django.contrib import messages
 
 # Create your views here.
 
-# def get_all_reviews(request):
-#     username = request.COOKIES.get('username')
-#     if username:
-#         try:
-#             response = requests.get('http://34.87.138.18/api/reviews/all')
-#             response.raise_for_status()
-#             all_reviews = response.json()
-
-#             # Filter reviews based on username
-#             reviews = [review for review in all_reviews if review.get('userId') == username]
-
-#         except requests.exceptions.RequestException as e:
-#             print("Error fetching reviews:", e)
-#             reviews = []
-#             messages.error(request, 'Failed to fetch reviews.')
-#     else:
-#         messages.error(request, 'User is not authenticated.')
-#         reviews = []
-
-#     return render(request, 'review.html', {'reviews': reviews})
-
 def get_all_reviews(request):
     username = request.COOKIES.get('username')
     if username:
@@ -39,7 +18,7 @@ def get_all_reviews(request):
             reviews = [review for review in all_reviews if review.get('userId') == username]
 
             # Fetch subscription box data from the given endpoint
-            response_subs = requests.get('http://34.143.166.153/api/subscriptions/all')
+            response_subs = requests.get('http://35.240.230.131/subscription-box/getAll')
             if response_subs.status_code == 200:
                 subscription_boxes = {box['id']: box['name'] for box in response_subs.json()}
                 for review in reviews:
@@ -67,7 +46,7 @@ def create_review(request):
         subsbox_id = request.POST.get('subscriptionBoxId')
 
         # Fetch subscription box data from the given endpoint
-        response_subs = requests.get('http://34.143.166.153/api/subscriptions/all')
+        response_subs = requests.get('http://35.240.230.131/subscription-box/getAll')
         if response_subs.status_code == 200:
             subscription_boxes = {box['id']: box['name'] for box in response_subs.json()}
             subscription_box_name = subscription_boxes.get(int(subsbox_id), 'Unknown')
@@ -91,7 +70,7 @@ def create_review(request):
             return render(request, 'create_review.html', {'subscription_boxes': subscription_boxes})
     else:
         # Fetch subscription box data from the given endpoint
-        response = requests.get('http://34.143.166.153/api/subscriptions/all')
+        response = requests.get('http://35.240.230.131/subscription-box/getAll')
         if response.status_code == 200:
             subscription_boxes = response.json()
             return render(request, 'create_review.html', {'subscription_boxes': subscription_boxes})
@@ -124,3 +103,14 @@ def delete_review(request, review_id):
         messages.error(request, 'User is not authenticated.')
 
     return redirect('subsbox_review:review_list')
+
+# def update_status(request):
+#     if is_admin(request):
+
+
+
+def is_admin(request):
+    role = request.COOKIES.get('role')
+    if role == 'ADMIN':
+        return True
+    return False
