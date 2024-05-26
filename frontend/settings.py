@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'homepage',
     'authentication',
     'subscription_box',
+    'subsbox_review',
     'subscription_management',
     'django.contrib.admin',
     'django.contrib.auth',
