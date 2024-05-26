@@ -19,13 +19,9 @@
                 <form method="POST" action="{% url 'subsbox_review:create_review' %}">
                     {% csrf_token %}
                     <div>
-                        <label for="box">box</label>
+                        <label for="box">Box</label>
                         <select class="form-control" id="subscriptionBoxId" name="subscriptionBoxId">
-                            <option value="box1">box 1</option>
-                            <option value="box2">box 2</option>
-                            <option value="box3">box 3</option>
-                            <option value="box4">box 4</option>
-                            <option value="box5">box 5</option>
+                            <!-- Options will be populated by JavaScript -->
                         </select>
                     </div>
                     <div class="form-group">
@@ -51,6 +47,24 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('http://34.143.166.153/api/subscriptions/all')
+                .then(response => response.json())
+                .then(data => {
+                    const subscriptionBoxId = document.getElementById('id');
+                    data.forEach(box => {
+                        const option = document.createElement('option');
+                        option.value = box.id;
+                        option.textContent = box.name;
+                        subscriptionBoxId.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching subscription boxes:', error);
+                });
+        });
+    </script>
 </body>
 </html>
 {% endblock content %}
