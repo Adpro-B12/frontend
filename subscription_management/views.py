@@ -40,9 +40,28 @@ def cancel(request, sub_id):
 def subscription_history(request):
     username = request.COOKIES.get('username')
     data = {'username': username}
-    response = requests.get('http://localhost:8080/api/subscriptions/subscriptions', json=data)
-    subscriptions = response.json()
+
+    try:
+        response = requests.get('http://localhost:8080/api/subscriptions/subscriptions', json=data)
+        subscriptions = response.json()
+    except:
+        subscriptions = []
     return render(request, 'subscription_history.html', {'subscriptions': subscriptions})
+
+def admin_list(request):
+    return render(request, 'subscription_admin.html')
+
+def admin_cancel(request, sub_id):
+    response = requests.post(f'http://localhost:8080/api/subscriptions/set_status/{sub_id}', json={"status":"CANCELLED"})
+    return HttpResponseRedirect(reverse('subscription_management:admin_list'))
+
+def admin_pending(request, sub_id):
+    response = requests.post(f'http://localhost:8080/api/subscriptions/set_status/{sub_id}', json={"status":"PENDING"})
+    return HttpResponseRedirect(reverse('subscription_management:admin_list'))
+
+def admin_approve(request, sub_id):
+    response = requests.post(f'http://localhost:8080/api/subscriptions/set_status/{sub_id}', json={"status":"APPROVED"})
+    return HttpResponseRedirect(reverse('subscription_management:admin_list'))
 
 
 def fetch_boxes(request):
@@ -72,6 +91,40 @@ def fetch_boxes(request):
 
         return JsonResponse(intersection, safe=False)
     
+    return JsonResponse(data, safe=False)
+
+def fetch_subscriptions(request):
+    status = request.GET.get('name', None)
+        
+    username = request.COOKIES.get('username')
+    data = {'username': username}
+
+    url = 'http://localhost:8080/api/subscriptions/subscriptions'
+    response = requests.get(url, json=data)
+    data = response.json()
+    
+
+    if status:
+        url = f'http://localhost:8080/api/subscriptions/status?status={status}'
+        data2 = requests.get(url).json()
+
+        dict1 = {item['id']: item for item in data}
+        dict2 = {item['id']: item for item in data2}
+
+        # Finding common ids
+        intersection_ids = set(dict1.keys()) & set(dict2.keys())
+
+        # Getting the intersection items based on common ids
+        intersection = [dict1[id] for id in intersection_ids]
+
+        return JsonResponse(intersection, safe=False)
+    
+    return JsonResponse(data, safe=False)
+
+def get_all_subscriptions(request):
+    url = 'http://localhost:8080/api/subscriptions/allsubs'
+    response = requests.get(url)
+    data = response.json()
     return JsonResponse(data, safe=False)
 
     

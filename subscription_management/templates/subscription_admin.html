@@ -8,7 +8,7 @@
 
     <form id="priceFilterForm">
         Status: <input type="text" id="status" name="status">
-        <button type="button" onclick="filterSubscriptions()">Filter</button>
+        <button type="button" onclick="allSubscriptions()">Filter</button>
     </form>
     <table id="boxesTable">
         <thead>
@@ -26,5 +26,5 @@
         </tbody>
     </table>
     <a href="{% url 'subscription_management:box_list' %}">Back to Subscription Box List</a>
-    <script src="{% static 'filter_subscriptions.js' %}"></script>
+    <script src="{% static 'subscription_admin.js' %}"></script>
 {% endblock content %}
