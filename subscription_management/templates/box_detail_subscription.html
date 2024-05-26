@@ -23,7 +23,11 @@
                     {% csrf_token %} <!-- CSRF token for security -->
                     <button type="submit" class="btn btn-primary">Subscribe</button>
                 </form>
-                <a href="{% url 'subscription_management:box_list' %}" class="btn btn-link">Back to Subscription Box List</a>
+                
+                <button onclick="location.href=`{% url 'subscription_management:box_list' %}`" type="button" class="btn btn-warning">
+                    Back to Box List
+                </button>
+                
             </div>
         </div>
     </div>
