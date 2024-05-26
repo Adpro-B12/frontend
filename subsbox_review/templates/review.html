@@ -57,11 +57,12 @@
 </head>
 <body>
     <div class="container">
-        <h1>Test Review Page</h1>
+        <h1>myReview Page</h1>
         <a href="{% url 'subsbox_review:create_review'%}" class="create-button">Create Review</a>
         {% for review in reviews %}
         <div class="card">
-            <h3>Rating: {{ review.rating_score }}</h3>
+            <h6>Box: {{ review.subscriptionBoxId }}</h6>
+            <p>Rating: {{ review.ratingScore }}</p>
             <p>Review: {{ review.review }}</p>
         </div>
         {% endfor %}
