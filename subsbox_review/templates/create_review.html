@@ -52,10 +52,10 @@
             fetch('http://34.143.166.153/api/subscriptions/all')
                 .then(response => response.json())
                 .then(data => {
-                    const subscriptionBoxId = document.getElementById('id');
+                    const subscriptionBoxId = document.getElementById('subscriptionBoxId');
                     data.forEach(box => {
                         const option = document.createElement('option');
-                        option.value = box.id;
+                        option.value = box.id; // menggunakan id dari API
                         option.textContent = box.name;
                         subscriptionBoxId.appendChild(option);
                     });
@@ -63,7 +63,8 @@
                 .catch(error => {
                     console.error('Error fetching subscription boxes:', error);
                 });
-        });
+            });
+
     </script>
 </body>
 </html>
