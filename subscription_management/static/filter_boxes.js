@@ -1,4 +1,4 @@
-function filterBoxes() {
+async function filterBoxes() {
     let minPrice = document.getElementById('minPrice').value;
     let maxPrice = document.getElementById('maxPrice').value;
     let name = document.getElementById('name').value;
@@ -19,7 +19,7 @@ function filterBoxes() {
         .catch(error => console.error('Error:', error));
 }
 
-function updateTable(boxes) {
+async function updateTable(boxes) {
     const tableBody = document.getElementById('boxesTable').getElementsByTagName('tbody')[0];
     tableBody.innerHTML = '';
 
@@ -54,7 +54,7 @@ function updateTable(boxes) {
 }
 
 // Example function to handle subscription logic
-function detailToBox(boxId) {
+async function detailToBox(boxId) {
     console.log(`detaild to box with ID: ${boxId}`);
     window.location.href = `/subscription/${boxId}/`;
     // Here, you could add more complex logic, such as making a POST request to a server endpoint to handle the subscription.
